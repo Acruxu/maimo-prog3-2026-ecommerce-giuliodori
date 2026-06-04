@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import { revalidatePath } from "next/cache";
 
 import { connectDB } from "@/lib/mongodb";
+import "@/models/Category";
 import Product from "@/models/Product";
 
 function getProductPayload(formData) {
@@ -13,11 +14,15 @@ function getProductPayload(formData) {
     price: Number(formData.get("price")),
     stock: Number(formData.get("stock")),
     image: formData.get("image"),
+    categories: formData
+      .getAll("categories")
+      .filter((categoryId) => mongoose.Types.ObjectId.isValid(categoryId)),
   };
 }
 
 function revalidateProductsDashboard() {
   revalidatePath("/");
+  revalidatePath("/dashboard");
 }
 
 export async function createProduct(_previousState, formData) {

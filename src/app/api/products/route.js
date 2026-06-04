@@ -1,12 +1,13 @@
 import { connectDB } from "@/lib/mongodb";
+import { getProducts } from "@/lib/products";
+import "@/models/Category";
 import Product from "@/models/Product";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    await connectDB();
-    const products = await Product.find().sort({ createdAt: -1 });
+    const products = await getProducts();
 
     return Response.json(products);
   } catch (error) {
@@ -28,6 +29,7 @@ export async function POST(request) {
       price: body.price,
       stock: body.stock,
       image: body.image,
+      categories: body.categories,
     });
 
     return Response.json(product, { status: 201 });

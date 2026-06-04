@@ -1,13 +1,14 @@
 import mongoose from "mongoose";
+
+import { getCategoryById } from "@/lib/categories";
 import { connectDB } from "@/lib/mongodb";
-import { getProductById } from "@/lib/products";
-import "@/models/Category";
+import Category from "@/models/Category";
 import Product from "@/models/Product";
 
 export const dynamic = "force-dynamic";
 
 function invalidIdResponse() {
-  return Response.json({ message: "ID de producto invalido" }, { status: 400 });
+  return Response.json({ message: "ID de categoria invalido" }, { status: 400 });
 }
 
 export async function GET(_request, { params }) {
@@ -18,16 +19,16 @@ export async function GET(_request, { params }) {
   }
 
   try {
-    const product = await getProductById(id);
+    const category = await getCategoryById(id);
 
-    if (!product) {
-      return Response.json({ message: "Producto no encontrado" }, { status: 404 });
+    if (!category) {
+      return Response.json({ message: "Categoria no encontrada" }, { status: 404 });
     }
 
-    return Response.json(product);
+    return Response.json(category);
   } catch (error) {
     return Response.json(
-      { message: "Error al obtener el producto", error: error.message },
+      { message: "Error al obtener la categoria", error: error.message },
       { status: 500 }
     );
   }
@@ -44,15 +45,11 @@ export async function PUT(request, { params }) {
     const body = await request.json();
     await connectDB();
 
-    const product = await Product.findByIdAndUpdate(
+    const category = await Category.findByIdAndUpdate(
       id,
       {
         name: body.name,
         description: body.description,
-        price: body.price,
-        stock: body.stock,
-        image: body.image,
-        categories: body.categories,
       },
       {
         new: true,
@@ -60,14 +57,14 @@ export async function PUT(request, { params }) {
       }
     );
 
-    if (!product) {
-      return Response.json({ message: "Producto no encontrado" }, { status: 404 });
+    if (!category) {
+      return Response.json({ message: "Categoria no encontrada" }, { status: 404 });
     }
 
-    return Response.json(product);
+    return Response.json(category);
   } catch (error) {
     return Response.json(
-      { message: "Error al actualizar el producto", error: error.message },
+      { message: "Error al actualizar la categoria", error: error.message },
       { status: 400 }
     );
   }
@@ -82,16 +79,21 @@ export async function DELETE(_request, { params }) {
 
   try {
     await connectDB();
-    const product = await Product.findByIdAndDelete(id);
+    const category = await Category.findByIdAndDelete(id);
 
-    if (!product) {
-      return Response.json({ message: "Producto no encontrado" }, { status: 404 });
+    if (!category) {
+      return Response.json({ message: "Categoria no encontrada" }, { status: 404 });
     }
 
-    return Response.json({ message: "Producto eliminado correctamente" });
+    await Product.updateMany(
+      { categories: category._id },
+      { $pull: { categories: category._id } }
+    );
+
+    return Response.json({ message: "Categoria eliminada correctamente" });
   } catch (error) {
     return Response.json(
-      { message: "Error al eliminar el producto", error: error.message },
+      { message: "Error al eliminar la categoria", error: error.message },
       { status: 500 }
     );
   }
