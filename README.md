@@ -367,6 +367,7 @@ Al enviar el formulario:
 - Se debe guardar el detalle completo del carrito.
 - Se debe calcular y guardar el total.
 - Se debe asignar un numero secuencial de orden.
+- Se debe mostrar un mensaje de agradecimiento o confirmacion de compra, idealmente incluyendo el numero de orden generado.
 - Se debe limpiar el carrito si la orden fue creada correctamente.
 
 ## 6. Rutas Obligatorias
@@ -452,7 +453,7 @@ Desde esta pantalla se debe poder cambiar el estado de cada orden entre:
 
 - `Active`
 - `Closed`
-- `Shiped`
+- `Shipped`
 - `Canceled`
 
 Se debe crear tambien una pantalla de detalle de orden:
@@ -548,6 +549,7 @@ Se evaluara:
 - Funcionamiento de la pantalla de favoritos.
 - Funcionamiento del carrito con productos customizados.
 - Creacion correcta de orders con numero secuencial.
+- Mensaje de agradecimiento o confirmacion visible luego de crear una orden.
 - Implementacion del dashboard administrativo con resumen, listado de ordenes y cambio de estado.
 - Calidad del diseño implementado con TailwindCSS.
 - Organizacion del codigo.
@@ -595,8 +597,9 @@ flowchart TD
     G --> I[Carrito]
     I --> J[Checkout]
     J --> K[Crear orden en MongoDB]
-    K --> L[Limpiar carrito]
-    L --> M[Compra finalizada]
+    K --> L[Mostrar mensaje de gracias]
+    L --> M[Limpiar carrito]
+    M --> Q[Compra finalizada]
 
     H --> N{Usuario logueado?}
     N -->|No| O[Guardar favoritos en Context]
@@ -616,7 +619,8 @@ flowchart LR
     E --> F[API de órdenes]
     F --> G[(MongoDB)]
     G --> H[Orden creada]
-    H --> I[Dashboard de órdenes]
+    H --> I[Mostrar mensaje de gracias]
+    I --> J[Dashboard de órdenes]
 ```
 
 ## 13.4 Flujo de favoritos
