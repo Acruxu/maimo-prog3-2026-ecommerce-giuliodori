@@ -29,6 +29,16 @@ export async function POST(request) {
       price: body.price,
       stock: body.stock,
       image: body.image,
+      wheelSizes: body.wheelSizes
+      .split(",")
+      .map((wheel) => Number(wheel.trim()))
+      .filter((wheel) => !Number.isNaN(wheel)),
+     frameSizes: body.frameSizes
+     .split(",")
+      .map((size) => size.trim())
+      .filter(Boolean),
+      riderLevel: body.riderLevel,
+      weight: body.weight,
       categories: body.categories,
     });
 

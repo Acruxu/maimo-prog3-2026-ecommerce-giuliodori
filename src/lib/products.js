@@ -11,6 +11,10 @@ function serializeProduct(product) {
     price: product.price,
     stock: product.stock,
     image: product.image,
+    wheelSizes: product.wheelSizes,
+    frameSizes: product.frameSizes,
+    riderLevel: product.riderLevel,
+    weight: product.weight,
     categories: (product.categories || []).map((category) => {
       if (category?.name) {
         return serializeCategory(category);

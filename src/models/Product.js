@@ -23,6 +23,21 @@ const productSchema = new mongoose.Schema(
       min: 0,
       default: 0,
     },
+    wheelSizes: [{
+    type: Number,
+    },],
+    frameSizes: [{
+    type: String,
+    },],
+     weight: {
+      type: Number,
+      min: 0,
+    },
+     riderLevel: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     image: {
       type: String,
       default: "",

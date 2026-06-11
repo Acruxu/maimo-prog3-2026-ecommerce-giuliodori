@@ -19,6 +19,10 @@ const initialForm = {
   price: "",
   stock: "",
   image: "",
+  frameSizes: "",
+  wheelSizes: "",
+  riderLevel: "",
+  weight: "",
   categories: [],
 };
 
@@ -61,6 +65,17 @@ export default function ProductManager({
     });
   }
 
+  function handleArrayChange(event) {
+  const { checked, value, name } = event.target;
+
+  setForm((current) => ({
+    ...current,
+    [name]: checked
+      ? [...current[name], value]
+      : current[name].filter((item) => item !== value),
+  }));
+}
+
   async function handleSubmit(event) {
     event.preventDefault();
     setIsSaving(true);
@@ -91,6 +106,10 @@ export default function ProductManager({
       price: String(product.price),
       stock: String(product.stock),
       image: product.image || "",
+      riderLevel: product.riderLevel || "",
+      weight: String(product.weight || ""),
+      wheelSizes: product.wheelSizes?.join(",") || "",
+      frameSizes: product.frameSizes?.join(",") || "",
       categories: (product.categories || []).map((category) =>
         typeof category === "string" ? category : category._id
       ),
@@ -138,6 +157,37 @@ export default function ProductManager({
             name="description"
             placeholder="Descripcion"
             value={form.description}
+            onChange={handleChange}
+          />
+         <input
+            className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none"
+            name="riderLevel"
+            placeholder="Level"
+            value={form.riderLevel}
+            onChange={handleChange}
+            required
+          />
+          <input
+            className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none"
+            name="weight"
+            placeholder="Peso (kg)"
+            type="number"
+            step="0.1"
+            value={form.weight}
+            onChange={handleChange}
+          />
+          <input
+            className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none"
+            name="frameSizes"
+            placeholder="S,M,L"
+            value={form.frameSizes}
+            onChange={handleChange}
+          />
+          <input
+            className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none"
+            name="wheelSizes"
+            placeholder="27.5,29"
+            value={form.wheelSizes}
             onChange={handleChange}
           />
           <input

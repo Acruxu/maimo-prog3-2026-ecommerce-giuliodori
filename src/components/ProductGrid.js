@@ -83,6 +83,12 @@ export default function ProductGrid({ products = [] }) {
             ) : null}
 
             <p className="mt-4 text-sm text-slate-500">Stock: {product.stock}</p>
+            <Link
+            href={`/product/${product._id}`}
+            className="mt-4 inline-block rounded bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+            >
+            Ver más
+            </Link>
           </div>
         </article>
       ))}

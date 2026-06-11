@@ -14,6 +14,16 @@ function getProductPayload(formData) {
     price: Number(formData.get("price")),
     stock: Number(formData.get("stock")),
     image: formData.get("image"),
+    weight: Number(formData.get("weight")),
+    riderLevel: formData.get("riderLevel"),
+    frameSizes: (formData.get("frameSizes") || "")
+      .split(",")
+      .map((size) => size.trim())
+      .filter(Boolean),
+    wheelSizes: (formData.get("wheelSizes") || "")
+      .split(",")
+      .map((wheel) => Number(wheel.trim()))
+      .filter((wheel) => !Number.isNaN(wheel)),
     categories: formData
       .getAll("categories")
       .filter((categoryId) => mongoose.Types.ObjectId.isValid(categoryId)),
